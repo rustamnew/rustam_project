@@ -1,0 +1,117 @@
+$orange: #ff7f50;
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Roboto;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+h1,h2,h3,h4,h5 {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+section {
+    /*width: 100vw;
+    height: 100vh;*/
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.container {
+    //width: 1200px;
+    margin: 0 auto;
+}
+
+
+
+
+section > h3 {
+    text-align: center;
+    font-size: 32px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    outline: none;
+    width: 16%;
+    height: 2rem;
+    margin-right: 5px;
+}
+input:last-child {
+    margin: 0;
+}
+
+
+//Animations
+
+.listing-enter {
+    transition: all 1s;
+    transform: translateX(100vw);
+    z-index: 2;
+}
+.listing-enter-active {
+    transition: all 1s;
+    transform: translateX(100vw);
+    z-index: 2;
+}
+.listing-enter-to {
+    transition: all 1s;
+    transform: translateX(100vw);
+    z-index: 2;
+}
+
+
+.listing-leave {
+    transition: all 1s;
+    transform: translateX(-100vw);
+    z-index: 1;
+}
+.listing-leave-active {
+    transition: all 1s;
+    transform: translateX(-100vw);
+    z-index: 1;
+}
+.listing-leave-to {
+    transition: all 1s;
+    transform: translateX(-100vw);
+    z-index: 1;
+    //opacity: 0;
+}
+
+
+
+
+
+

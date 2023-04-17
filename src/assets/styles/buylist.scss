@@ -1,0 +1,40 @@
+.buylist{
+
+    .panel {
+        width: 100%;
+        display: flex;
+
+        .names {
+            background-color: #ff7f50;
+            color: #fff;
+            width: 30%;
+            padding: 50px;
+
+            .item {
+                margin-bottom: 12px;
+
+                a {
+                    font-size: 20px;
+                }
+            }
+        }
+
+        .parts {
+            background-color: bisque;
+            color: #000000;
+            width: 70%;
+            padding: 50px;
+
+
+
+            .item {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                border-bottom: 1px solid #000;
+                padding-bottom: 6px;
+                margin-bottom: 12px;
+            }
+        }
+    }
+}
