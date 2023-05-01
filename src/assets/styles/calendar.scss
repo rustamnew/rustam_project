@@ -1,0 +1,77 @@
+.calendar {
+    display: flex;
+}
+
+.date-wrapper {
+    width: 800px;
+    //margin: 0 auto;
+}
+
+
+.vc-highlights {
+    display: none;
+    position: unset;
+}
+.vc-highlight-content-solid {
+    color: inherit;
+}
+.vc-week {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.vc-day {
+    width: 100px;
+    height: 100px;
+    border: 1px solid gray;
+
+    margin-right: 10px;
+
+    justify-content: flex-start;
+    align-items: flex-start;
+
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+.vc-monthly .is-not-in-month * {
+    opacity: 0.4;
+}
+
+
+.needs-wrapper {
+    flex: 1;
+    
+    border: 1px solid gray;
+    border-radius: 10px;
+
+    max-width: 100%;
+
+    .needs {
+        padding: 20px;
+        border-bottom: 1px solid gray;
+
+        .needs-list {
+            display: flex;
+            margin-bottom: 20px;
+    
+            .item {
+                margin-right: 10px;
+                border-radius: 10px;
+                padding: 10px 20px;
+                color: #fff;
+    
+                display: flex;
+    
+                .name {
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
+
+    
+}
+
+

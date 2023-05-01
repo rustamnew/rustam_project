@@ -1,5 +1,6 @@
 <script setup>
 import Dish from '../components/Dish/Dish.vue'
+import Calendar from '../components/Calendar/Calendar.vue'
 
 //import {useMainPagesStore} from '../stores/mainPages'
 //const mainPageStore = useMainPagesStore();
@@ -25,6 +26,8 @@ import Dish from '../components/Dish/Dish.vue'
 
             const swiperParams = {
                 slidesPerView: 1,
+                initialSlide: 2,
+                //allowTouchMove: false,
                 pagination: {
                     el: this.$refs.paginationLine,
                     clickable: true,
@@ -56,7 +59,7 @@ import Dish from '../components/Dish/Dish.vue'
         </swiper-slide>
 
         <swiper-slide>
-            <Dish />
+            <Calendar />
         </swiper-slide>
 
     </swiper-container>
