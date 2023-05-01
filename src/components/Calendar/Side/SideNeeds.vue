@@ -21,15 +21,6 @@
                     </div>
                 </template>
 
-                <div
-                    class="drag-el"
-                    v-for="item in items"
-                    :key="item.name"
-                    draggable
-                    @dragstart="startDrag($event, item)"
-                    >
-                    {{ item.name }}
-                </div>
         
             </div>
 
