@@ -1,8 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import AddDish from './components/AddDish.vue'
-import DishList from './components/DishList.vue'
-import DishBuyList from './components/DishBuyList.vue'
+
+import { register } from 'swiper/element/bundle';
+
+register();
 </script>
 
 <template>

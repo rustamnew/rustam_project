@@ -11,6 +11,7 @@
 
 .pageSlider {
     position: fixed;
+    z-index: 100;
     bottom: 1%;
     left: 50%;
     transform: translateX(-50%);
@@ -53,4 +54,8 @@
         }
         
     }
+}
+
+.page {
+    height: 100vh;
 }
