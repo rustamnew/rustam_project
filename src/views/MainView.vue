@@ -27,7 +27,7 @@ import Calendar from '../components/Calendar/Calendar.vue'
             const swiperParams = {
                 slidesPerView: 1,
                 initialSlide: 2,
-                //allowTouchMove: false,
+                allowTouchMove: false,
                 pagination: {
                     el: this.$refs.paginationLine,
                     clickable: true,

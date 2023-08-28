@@ -1,5 +1,8 @@
 <script setup>
 
+import {useCalendarDragStore} from '../../../stores/calendarDrag'
+const calendarDragStore = useCalendarDragStore();
+
 </script>
 
 <template>
@@ -8,14 +11,16 @@
             <h3>Потребности</h3>
 
             <div class="needs-list">
-
+                
                 <template v-for="item in items" :key="item.name">
                     <div class="item" :style="{
                         backgroundColor: item.color,
                         color: '#fff'
                     }" 
-                    draggable 
-                    @dragstart="startDrag($event, item)">
+                    @dragstart="startDrag($event, item)"
+                    @drop="dropDrag($event, item)"
+                    @dragend="endDrag($event, item)"
+                    draggable="true">
                         <div class="name">{{ item.name }}</div>
                         <div class="price">{{ item.price }}р.</div>
                     </div>
@@ -63,17 +68,18 @@
             }
         },
         methods: {
-            startDrag(evt, item) {
-                console.log(evt)
-                console.log(item)
-                evt.dataTransfer.dropEffect = 'move'
-                evt.dataTransfer.effectAllowed = 'move'
-                evt.dataTransfer.setData('itemID', item.id)
+            startDrag(e, item) {
+                console.log(e.target)
+
+                e.target.classList.add('dragging')
             },
-            onDrop(evt, list) {
-                const itemID = evt.dataTransfer.getData('itemID')
-                const item = this.items.find((item) => item.id == itemID)
-                item.list = list
+            endDrag(e, list) {
+                //console.log(e)
+                //console.log(list)
+            },
+            dropDrag(e, item) {
+                //console.log(e)
+                //console.log(item)
             },
         },
     }
