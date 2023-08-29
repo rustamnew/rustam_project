@@ -45,27 +45,49 @@
     }
 
     .cell_inner {
-        align-self: flex-end;
         display: flex;
         flex-direction: column;
         font-size: 0.8rem;
         width: 100%;
 
-        .item {
+        .wish-list {
             display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            border-radius: 6px;
-            padding: 2px;
-            margin-bottom: 4px;
+            flex-direction: column;
 
-            background-color: orange;
-            color: white;
+            .item {
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                border-radius: 6px;
+                padding: 2px;
+                margin-bottom: 4px;
+    
+                background-color: orange;
+                color: white;
+    
+                .name {
+                    font-size: 0.7rem;
+                    margin-right: 0.1rem;
+                }
 
-            .name {
-                font-size: 0.7rem;
-                margin-right: 0.1rem;
+                .price::after {
+                    content: 'р.';
+                }
             }
+        }
+
+        .total {
+            border-top: 1px solid gray;
+            display: none;
+            justify-content: space-between;
+
+            .price::after {
+                content: 'р.';
+            }
+        }
+
+        .wish-list:has(.item) ~ .total {
+            display: flex;
         }
         
     }
@@ -108,6 +130,9 @@
                 }
                 .name {
                     margin-right: 4px;
+                }
+                .price::after {
+                    content: 'р.';
                 }
             }
         }

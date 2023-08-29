@@ -21,7 +21,7 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
                     @dragend="endDrag($event, item)"
                     draggable="true">
                         <div class="name">{{ item.name }}</div>
-                        <div class="price">{{ item.price }}р.</div>
+                        <div class="price">{{ item.price }}</div>
                     </div>
                 </template>
 
@@ -68,7 +68,6 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
         },
         methods: {
             startDrag(e, item) {
-                console.log(e.target)
 
                 e.target.classList.add('dragging')
 
