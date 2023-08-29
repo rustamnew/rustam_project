@@ -1,7 +1,6 @@
 <script setup>
 
-import {useCalendarDragStore} from '../../../stores/calendarDrag'
-const calendarDragStore = useCalendarDragStore();
+import {useCalendarDragStore} from '../../../stores/calendarDrag';
 
 </script>
 
@@ -72,6 +71,16 @@ const calendarDragStore = useCalendarDragStore();
                 console.log(e.target)
 
                 e.target.classList.add('dragging')
+
+                let created_obj = {}
+                created_obj.id = item.id
+                created_obj.color = item.color
+                created_obj.name = item.name
+                created_obj.price = item.price
+                created_obj.type = item.type
+
+                const calendarDragStore = useCalendarDragStore()
+                calendarDragStore.dragObjSet(created_obj)
             },
             endDrag(e, list) {
                 //console.log(e)
