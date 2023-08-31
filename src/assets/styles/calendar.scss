@@ -80,6 +80,7 @@
             border-top: 1px solid gray;
             display: none;
             justify-content: space-between;
+            margin-top: 10px;
 
             .price::after {
                 content: 'р.';
@@ -111,10 +112,12 @@
 
         .needs-list {
             display: flex;
+            flex-wrap: wrap;
             margin-bottom: 20px;
     
-            .item {
+            .needs-item {
                 margin-right: 10px;
+                margin-bottom: 10px;
                 border-radius: 10px;
                 padding: 10px 20px;
                 color: #fff;
@@ -123,9 +126,11 @@
                 display: flex;
                 
                 /*cursor: grab;*/
+
                 cursor: move;
                 &.dragging {
                     /*cursor: grabbing;*/
+
                     opacity: 1;
                 }
                 .name {
@@ -136,9 +141,37 @@
                 }
             }
         }
-    }
 
-    
+        .needs-add {
+
+            .inputs {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+
+                .input {
+                    width: auto;
+                }
+
+                .check-submit {
+                    width: 32px;
+                    height: 32px; 
+                    background: none;
+                    opacity: 0.8;
+                    opacity: 0;
+                    transition: 0.2s ease-out;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+
+                    
+                    &.active {
+                        opacity: 1;
+                    }
+                }
+                 
+            }
+        }
+    } 
 }
-
-

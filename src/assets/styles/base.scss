@@ -57,3 +57,19 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
+
+input {
+    appearance: none;
+    border: 1px solid #808080;
+
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}

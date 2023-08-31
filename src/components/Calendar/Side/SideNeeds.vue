@@ -12,7 +12,7 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
             <div class="needs-list">
                 
                 <template v-for="item in items" :key="item.name">
-                    <div class="item" :style="{
+                    <div class="needs-item" :style="{
                         backgroundColor: item.color,
                         color: '#fff'
                     }" 
@@ -29,7 +29,17 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
             </div>
 
             <div class="needs-add">
-                <button class="button">Добавить</button>
+                <button class="button"
+                @click="addNeeds()">Добавить</button>
+
+                <div class="inputs" v-if="showAddButtons">
+                    <input class="input" type="text" name="add-needs-name" placeholder="Название" @keyup="inputsCheck()">
+                    <input class="input" type="number" name="add-needs-price" placeholder="Стоимость" @keyup="inputsCheck()">
+
+                    <button class="check-submit" :class="{active: activeCheckSumbit}" @click="needsAddSubmit()">
+                        <img src="../../../assets/images/icons/check-icon.svg" alt="Готово">
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -41,6 +51,8 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
     export default {
         data() {
             return {
+                showAddButtons: false,
+                activeCheckSumbit: false,
                 items: [
                     {
                         id: 0,
@@ -81,6 +93,63 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
                 const calendarDragStore = useCalendarDragStore()
                 calendarDragStore.dragObjSet(created_obj)
             },
+
+            addNeeds() {
+                this.showAddButtons = true
+
+                setTimeout(() => {
+                    document.querySelector('[name=add-needs-name]').focus()
+                }, 1);
+                
+            },
+            
+            needsAddSubmit() {
+                let name_input = document.querySelector('input[name=add-needs-name]')
+                let price_input = document.querySelector('input[name=add-needs-price]')
+
+                let name = name_input.value
+                let price = price_input.value
+
+                //Найти максимальный id (временно)
+                let max_id = 0
+                this.items.map( (obj) => {
+                    console.log(obj.id)
+                    if (obj.id > max_id) {
+                        max_id = obj.id
+                    }
+                })
+
+                let obj = {
+                    id: max_id,
+                    name: name,
+                    price: price,
+                    type: 'needs',
+                    color: 'lightgray'
+                }
+
+                this.items.push(obj)
+
+                
+
+                //Закрытие и очистка полей
+                this.showAddButtons = false;
+                this.activeCheckSumbit = false;
+                name_input.value = '';
+                price_input.value = '';
+            },
+
+            inputsCheck() {
+                let name_input = document.querySelector('input[name=add-needs-name]')
+                let price_input = document.querySelector('input[name=add-needs-price]')
+
+                if (name_input.value && price_input.value) {
+                    this.activeCheckSumbit = true
+                } else {
+                    this.activeCheckSumbit = false
+                }
+            },
+
+
             endDrag(e, list) {
                 //console.log(e)
                 //console.log(list)
