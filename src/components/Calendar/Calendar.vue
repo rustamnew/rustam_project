@@ -13,49 +13,48 @@
     export default {
         data() {
             return {
-                wishes: [
-                    {
-                        date: '2023-08-04',
-                        wish: {
-                            name: 'Еда1',
-                            price: '150',
-                            color: 'gray'
-                        }
-                    },
-                    {
-                        date: '2023-08-04',
-                        wish: {
-                            name: 'Еда2',
-                            price: '120',
-                            color: 'purple'
-                        }
-                    },
-                    {
-                        date: '2023-08-04',
-                        wish: {
-                            name: 'Еда3',
-                            price: '100',
-                            color: 'green',
-                        }
-                    },
-                ]
+                remove: false,
+                wishes: []
             }
             
         },
         methods: {
             onDrop(e) {
-                let item;
 
-                if (!e.target.classList.contains('vc-day')) {
-                    item = e.target.closest('.vc-day');
+                if (this.remove) {
+                    if (e.target.classList.contains('remove-area')) {
+                        
+                    }
                 } else {
-                    item = e.target;
+                    let item;
+
+                    if (!e.target.classList.contains('vc-day')) {
+                        item = e.target.closest('.vc-day');
+                    } else {
+                        item = e.target;
+                    }
+
+
+                    if (item && item.classList.contains('inited')) {
+                        this.addDraggedWishToDay(item);
+                    } else if (!item) {
+                        
+                    } else {
+                        console.log('day cell not inited, need to call the init function first');
+                    }
                 }
-                if (item.classList.contains('inited')) {
-                    this.addDraggedWishToDay(item);
-                } else {
-                    console.log('day cell not inited, need to call the init function first');
+
+                /*if (e.srcElement.classList.contains('vc-day')) { // предотвращение бага
+                    console.log(e)
+                    return
                 }
+                if (e.srcElement.closest('.cell_inner')) { // если потянули из календаря
+                    console.log(e)
+                    return
+                }*/
+
+
+                
             },
 
             onDragOver(e) {
@@ -92,7 +91,15 @@
 
             },
 
-            initCalendarCells() {
+            initCalendar() {
+                //Добавление зоны для удаления
+                let wrap = document.querySelector('.vc-pane-container')
+                let remove_area = document.createElement('div')
+                remove_area.classList.add('remove-area')
+                wrap.append(remove_area)
+
+
+                //Инициализация ячеек календаря
                 let cells = document.querySelectorAll('.vc-day:not(.inited)')
                 cells.forEach( (cell) => {
 
@@ -146,13 +153,26 @@
                 price.innerHTML = wish_obj_item.wish.price
 
                 item.style.backgroundColor = wish_obj_item.wish.color;
+                item.setAttribute('buy-item-id', wish_obj_item.wish.id)
+
+                item.draggable = true
+                item.addEventListener('dragstart', (e) => {
+                    this.remove = true
+                    this.showRemoveArea()
+                    console.log(e)
+                })
+                item.addEventListener('dragend', (e) => {
+                    this.remove = false
+                    this.hideRemoveArea()
+                    console.log(e)
+                })
+                item.addEventListener('startdrag', this.showRemoveArea)
 
                 item.append(name);
                 item.append(price);
 
                 day_cell.querySelector('.wish-list').append(item);
             },
-
 
             //  Добавление перетянутого Wish (drag&drop) //
             addDraggedWishToDay(day_cell) {
@@ -172,6 +192,20 @@
 
                 item.style.backgroundColor = calendarDragStore.dragObj.color;
 
+
+                item.draggable = true
+                item.addEventListener('dragstart', (e) => {
+                    this.remove = true
+                    this.showRemoveArea()
+                    console.log(e)
+                })
+                item.addEventListener('dragend', (e) => {
+                    this.remove = false
+                    this.hideRemoveArea()
+                    console.log(e)
+                })
+                item.addEventListener('startdrag', this.showRemoveArea)
+
                 item.append(name);
                 item.append(price);
 
@@ -184,13 +218,20 @@
             },
 
             onMounted() {
-                this.initCalendarCells();
+                this.initCalendar();
                 this.wishes.forEach( (wish_obj_item) => {
                     this.addObjWish(wish_obj_item)
                 })
                 this.updateTotalSumms();
                 
-            }
+            },
+
+            showRemoveArea() {
+                document.querySelector('.remove-area').classList.add('active')
+            },
+            hideRemoveArea() {
+                document.querySelector('.remove-area').classList.remove('active')
+            },
 
         },
 

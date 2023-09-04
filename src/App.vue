@@ -1,9 +1,21 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 
+import {useDataStore} from './stores/data';
+
 import { register } from 'swiper/element/bundle';
 
 register();
+</script>
+
+<script>
+
+export default {
+    mounted() {
+        const dataStore = useDataStore()
+        dataStore.loadData()
+    }
+}
 </script>
 
 <template>

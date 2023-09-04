@@ -1,27 +1,33 @@
 <script setup>
 
 import {useCalendarDragStore} from '../../../stores/calendarDrag';
+import {useDataStore} from '../../../stores/data';
+import {useDialogStore} from '../../../stores/dialog';
 
 </script>
 
 <template>
     <div class="needs-wrapper">
         <div class="needs">
-            <h3>Потребности</h3>
+            <h3>Покупки</h3>
 
             <div class="needs-list">
                 
                 <template v-for="item in items" :key="item.name">
                     <div class="needs-item" :style="{
                         backgroundColor: item.color,
-                        color: '#fff'
                     }" 
+                    :black-font="item.color ? 'true' : 'false'"
+                    :buy-item-id="item.id"
                     @dragstart="startDrag($event, item)"
                     @drop="dropDrag($event, item)"
                     @dragend="endDrag($event, item)"
                     draggable="true">
                         <div class="name">{{ item.name }}</div>
                         <div class="price">{{ item.price }}</div>
+                        <div class="remove" @click="removeBuyItem($event)">
+                            <img src="../../../assets/images/icons/cross.svg" alt="Закрыть">
+                        </div>
                     </div>
                 </template>
 
@@ -30,13 +36,13 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
 
             <div class="needs-add">
                 <button class="button"
-                @click="addNeeds()">Добавить</button>
+                @click="addBuyItem()">Добавить</button>
 
                 <div class="inputs" v-if="showAddButtons">
                     <input class="input" type="text" name="add-needs-name" placeholder="Название" @keyup="inputsCheck()">
                     <input class="input" type="number" name="add-needs-price" placeholder="Стоимость" @keyup="inputsCheck()">
 
-                    <button class="check-submit" :class="{active: activeCheckSumbit}" @click="needsAddSubmit()">
+                    <button class="check-submit" :class="{active: activeCheckSumbit}" @click="buyItemAddSubmit()">
                         <img src="../../../assets/images/icons/check-icon.svg" alt="Готово">
                     </button>
                 </div>
@@ -50,51 +56,29 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
 <script>
     export default {
         data() {
+            const dataStore = useDataStore()
+            const dialogStore = useDialogStore()
+
             return {
                 showAddButtons: false,
                 activeCheckSumbit: false,
-                items: [
-                    {
-                        id: 0,
-                        name: 'Еда1',
-                        type: 'needs',
-                        price: '1500',
-                        color: 'red'
-                    },
-                    {
-                        id: 1,
-                        name: 'Еда2',
-                        type: 'needs',
-                        price: '1500',
-                        color: 'green'
-                    },
-                    {
-                        id: 2,
-                        name: 'Еда3',
-                        type: 'needs',
-                        price: '1500',
-                        color: 'blue'
-                    },
-                ]
+                dataStore,
+                dialogStore,
+                items: []
             }
         },
+
+        mounted() {
+            this.loadData()
+        },
+
         methods: {
-            startDrag(e, item) {
-
-                e.target.classList.add('dragging')
-
-                let created_obj = {}
-                created_obj.id = item.id
-                created_obj.color = item.color
-                created_obj.name = item.name
-                created_obj.price = item.price
-                created_obj.type = item.type
-
-                const calendarDragStore = useCalendarDragStore()
-                calendarDragStore.dragObjSet(created_obj)
+            loadData() {
+                console.log(this.dataStore.getData('all', 'buy_items_all'))
+                this.items = this.dataStore.getData('all', 'buy_items_all')
             },
 
-            addNeeds() {
+            addBuyItem() {
                 this.showAddButtons = true
 
                 setTimeout(() => {
@@ -102,8 +86,8 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
                 }, 1);
                 
             },
-            
-            needsAddSubmit() {
+
+            buyItemAddSubmit() {
                 let name_input = document.querySelector('input[name=add-needs-name]')
                 let price_input = document.querySelector('input[name=add-needs-price]')
 
@@ -113,21 +97,27 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
                 //Найти максимальный id (временно)
                 let max_id = 0
                 this.items.map( (obj) => {
-                    console.log(obj.id)
                     if (obj.id > max_id) {
                         max_id = obj.id
                     }
                 })
 
+                //Случайный цвет (временно)
+                let random_color = Math.floor(Math.random()*16777215).toString(16);
+                if (random_color.length < 6) {
+                    random_color += 1
+                }
+
                 let obj = {
-                    id: max_id,
+                    id: max_id + 1,
                     name: name,
                     price: price,
                     type: 'needs',
-                    color: 'lightgray'
+                    color: '#' + random_color
                 }
 
-                this.items.push(obj)
+
+                this.dataStore.saveData(obj, 'buy_items_all')
 
                 
 
@@ -149,6 +139,38 @@ import {useCalendarDragStore} from '../../../stores/calendarDrag';
                 }
             },
 
+            removeBuyItem(e) {
+                let item = e.target.closest('.needs-item')
+                let id = item.getAttribute('buy-item-id')
+
+                this.dialogStore.showConfirmDialog(() => {
+                    this.removeBuyItemConfirmed(item, id)
+                })
+            },
+
+            removeBuyItemConfirmed(item, id) {
+                console.log(item)
+                console.log(id)
+                item.classList.add('removing')
+                setTimeout( () => {
+                    this.dataStore.removeData(id, 'buy_items_all')
+                }, 500)
+            },
+
+            startDrag(e, item) {
+                console.log(e)
+                e.target.classList.add('dragging');
+
+                let created_obj = {};
+                created_obj.id = item.id;
+                created_obj.color = item.color;
+                created_obj.name = item.name;
+                created_obj.price = item.price;
+                created_obj.type = item.type;
+
+                const calendarDragStore = useCalendarDragStore();
+                calendarDragStore.dragObjSet(created_obj);
+            },
 
             endDrag(e, list) {
                 //console.log(e)

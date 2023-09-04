@@ -1,6 +1,7 @@
 <script setup>
 import Dish from '../components/Dish/Dish.vue'
 import Calendar from '../components/Calendar/Calendar.vue'
+import Dialog from '../components/Dialog/Dialog.vue';
 
 //import {useMainPagesStore} from '../stores/mainPages'
 //const mainPageStore = useMainPagesStore();
@@ -45,6 +46,7 @@ import Calendar from '../components/Calendar/Calendar.vue'
 
 
 <template>
+    <Dialog />
     <swiper-container 
         ref="swiper" 
         init="false" 
@@ -74,6 +76,8 @@ import Calendar from '../components/Calendar/Calendar.vue'
             -->
         </div>
     </div>
+
+
 </template>
 
 <style>
