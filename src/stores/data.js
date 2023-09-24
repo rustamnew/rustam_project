@@ -8,7 +8,17 @@ export const useDataStore = defineStore('data', {
         return {
             localStorage: {
                 buy_items_all: [],
-                calendar: {}
+                calendar: {
+                    /*'2023-09-08': {
+                        day_buy_items: [
+
+                        ]
+                    }*/
+                }
+
+                
+                    
+                
             },
             cookie: {
         
@@ -21,6 +31,9 @@ export const useDataStore = defineStore('data', {
             if (localStorage.buy_items_all) {
                 this.localStorage.buy_items_all = JSON.parse(localStorage.buy_items_all)
             }
+            if (localStorage.calendar) {
+                this.localStorage.calendar = JSON.parse(localStorage.calendar)
+            }
         },
         getData(id, type) {
             if (id == 'all') {
@@ -29,12 +42,25 @@ export const useDataStore = defineStore('data', {
             }
         },
 
-        saveData(obj, type) {
-
-            //localStorage
-            this.localStorage[type].push(obj)
-            let new_obj = JSON.stringify(this.localStorage[type])
-            localStorage[type] = new_obj
+        saveData(obj, type, date = false) {
+            if (type == 'buy_items_all') {
+                this.localStorage[type].push(obj)
+                let new_obj = JSON.stringify(this.localStorage[type])
+                localStorage[type] = new_obj
+            }
+            if (type == 'calendar') {
+                if (!this.localStorage[type][date]) {
+                    this.localStorage[type][date] = {}
+                }
+                if (!this.localStorage[type][date].day_buy_items) {
+                    this.localStorage[type][date].day_buy_items = []
+                }
+                this.localStorage[type][date].day_buy_items.push(obj)
+                let new_obj = JSON.stringify(this.localStorage[type])
+                localStorage[type] = new_obj
+            }
+            
+            
         },
 
         saveLocalStorage(type) {
