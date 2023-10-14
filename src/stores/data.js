@@ -17,8 +17,6 @@ export const useDataStore = defineStore('data', {
                 }
 
                 
-                    
-                
             },
             cookie: {
         
@@ -69,20 +67,22 @@ export const useDataStore = defineStore('data', {
         },
 
         removeData(id, type) {
-            let item = this.localStorage[type].find( (item) => item.id == id)
-            let index = this.localStorage[type].indexOf(item)
-
-            //this.localStorage[type][index]
-
-            if (index > -1) {
-                let test = this.localStorage[type]
-                console.log(test)
-                console.log(item)
-                this.localStorage[type].splice(index, 1);
-                console.log(this.localStorage[type])
-
+            if (type == 'calendar') {
                 this.saveLocalStorage(type)
+            } else {
+
+                let item = this.localStorage[type].find( (item) => item.id == id)
+                let index = this.localStorage[type].indexOf(item)
+    
+                if (index > -1) {
+                    //let test = this.localStorage[type]
+                    //console.log(test)
+                    this.localStorage[type].splice(index, 1);
+    
+                    this.saveLocalStorage(type)
+                }
             }
+
               
         }
     }

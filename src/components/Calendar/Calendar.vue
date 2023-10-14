@@ -19,7 +19,7 @@ const date = ref(new Date());
             return {
                 remove: false,
                 dataStore,
-                wishes: []
+                wishes: {}
             }
             
         },
@@ -48,15 +48,6 @@ const date = ref(new Date());
                         console.log('day cell not inited, need to call the init function first');
                     }
                 }
-
-                /*if (e.srcElement.classList.contains('vc-day')) { // предотвращение бага
-                    console.log(e)
-                    return
-                }
-                if (e.srcElement.closest('.cell_inner')) { // если потянули из календаря
-                    console.log(e)
-                    return
-                }*/
 
 
                 
@@ -101,6 +92,10 @@ const date = ref(new Date());
                 let wrap = document.querySelector('.vc-pane-container')
                 let remove_area = document.createElement('div')
                 remove_area.classList.add('remove-area')
+                remove_area.addEventListener('drop', (e) => {
+                    e.preventDefault()
+                    this.removeFromCalendar()
+                })
                 wrap.append(remove_area)
 
 
@@ -138,8 +133,44 @@ const date = ref(new Date());
                     cell.classList.add('inited')
                 })
 
+                //Инициализация зоны удаления
+                document.querySelector('.remove-area').addEventListener('ondrop', (e) => {console.log(e)})
+
 
                 this.loadData();
+            },
+
+            removeFromCalendar() {
+                const dataStore = useDataStore()
+                const calendarDragStore = useCalendarDragStore()
+
+                calendarDragStore.dragObj.target.remove()
+
+                let date = calendarDragStore.dragObj.date
+
+                if (!this.wishes[date]) {
+                    this.wishes[date] = {}
+                }
+                if (!this.wishes[date].day_buy_items) {
+                    this.wishes[date].day_buy_items = []
+                }
+
+                let items = this.wishes[date].day_buy_items
+                
+
+                const found = items.find((obj) => obj.id == calendarDragStore.dragObj.id);
+
+                const index = items.indexOf(found);
+
+                if (index > -1) {
+                    items.splice(index, 1);
+                }
+
+                this.wishes[date].day_buy_items = items
+                
+                dataStore.removeData(found.id,'calendar')
+                this.wishes = this.dataStore.getData('all', 'calendar')
+
             },
 
             loadData() {
@@ -148,9 +179,14 @@ const date = ref(new Date());
 
             //  Вывод Wish, на вход объект, день находится автоматически  //
             addObjWish(day_wish_obj) {
+                const calendarDragStore = useCalendarDragStore()
+
                 day_wish_obj[1].forEach( (wish_obj_item) => {
                     let day_cell = document.querySelector(`.id-${wish_obj_item.date}`)
 
+                    if (!day_cell) {
+                        return
+                    }
                     let item = document.createElement('div');
                     let name = document.createElement('div');
                     let price = document.createElement('div');
@@ -164,27 +200,39 @@ const date = ref(new Date());
                     price.innerHTML = wish_obj_item.price
 
                     item.style.backgroundColor = wish_obj_item.color;
-                    item.setAttribute('buy-item-id', wish_obj_item.id)
+                    //item.setAttribute('buy-item-id', wish_obj_item.id)
+                    //item.setAttribute('date', wish_obj_item.date)
+                    //item.setAttribute('color-hex', wish_obj_item.color)
 
                     item.draggable = true
                     item.addEventListener('dragstart', (e) => {
                         this.remove = true
                         this.showRemoveArea()
-                        console.log(e)
+                        let obj = {
+                            color: wish_obj_item.color,
+                            id: wish_obj_item.id,
+                            name: wish_obj_item.name,
+                            price: wish_obj_item.price,
+                            date: wish_obj_item.date,
+                            target: e.target,
+                            type: "needs",
+                        }
+                        calendarDragStore.dragObjSet(obj)
                     })
                     item.addEventListener('dragend', (e) => {
                         this.remove = false
                         this.hideRemoveArea()
-                        console.log(e)
+                        this.checkRemove(e)
                     })
-                    item.addEventListener('startdrag', this.showRemoveArea)
 
                     item.append(name);
                     item.append(price);
 
                     day_cell.querySelector('.wish-list').append(item);
                 })
-                
+            },
+
+            checkRemove(e) {
             },
 
             //  Добавление перетянутого Wish (drag&drop) //
@@ -207,16 +255,27 @@ const date = ref(new Date());
                 item.setAttribute('item_id', calendarDragStore.dragObj.id)
 
 
+                let date = day_cell.classList[1].split('id-').pop();
+                let obj = {
+                    id: calendarDragStore.dragObj.id,
+                    name: calendarDragStore.dragObj.name,
+                    price: calendarDragStore.dragObj.price,
+                    type: 'needs',
+                    color: calendarDragStore.dragObj.color,
+                    target: item,
+                    date: date
+                }
+
+
                 item.draggable = true
                 item.addEventListener('dragstart', (e) => {
                     this.remove = true
                     this.showRemoveArea()
-                    console.log(e)
+                    calendarDragStore.dragObjSet(obj)
                 })
                 item.addEventListener('dragend', (e) => {
                     this.remove = false
                     this.hideRemoveArea()
-                    console.log(e)
                 })
                 item.addEventListener('startdrag', this.showRemoveArea)
 
@@ -227,33 +286,14 @@ const date = ref(new Date());
 
                 this.updateTotalSumms(day_cell)
 
-
-                let date = day_cell.classList[1].split('id-').pop();
-
-                let obj = {
-                    id: calendarDragStore.dragObj.id,
-                    name: calendarDragStore.dragObj.name,
-                    price: calendarDragStore.dragObj.price,
-                    type: 'needs',
-                    color: calendarDragStore.dragObj.color,
-                    date: date
-                }
-
-
                 this.dataStore.saveData(obj, 'calendar', date)
-
-                //Сохранение в cookie/localstorage
-                //Отправка запроса на сохранение
             },
 
             onMounted() {
                 this.initCalendar();
-                console.log(this.wishes)
-                //this.wishes.forEach( (wish_obj_item) => {
                 Object.entries(this.wishes).forEach( (date) => {
                     let day_objects = this.wishes[date[0]]
                     Object.entries(day_objects).forEach( (obj) => {
-                        console.log(obj)
                         this.addObjWish(obj)
                     })
                     

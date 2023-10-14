@@ -74,7 +74,6 @@ import {useDialogStore} from '../../../stores/dialog';
 
         methods: {
             loadData() {
-                console.log(this.dataStore.getData('all', 'buy_items_all'))
                 this.items = this.dataStore.getData('all', 'buy_items_all')
             },
 
@@ -143,6 +142,7 @@ import {useDialogStore} from '../../../stores/dialog';
                 let item = e.target.closest('.needs-item')
                 let id = item.getAttribute('buy-item-id')
 
+                
                 this.dialogStore.showConfirmDialog(() => {
                     this.removeBuyItemConfirmed(item, id)
                 })
@@ -158,7 +158,6 @@ import {useDialogStore} from '../../../stores/dialog';
             },
 
             startDrag(e, item) {
-                console.log(e)
                 e.target.classList.add('dragging');
 
                 let created_obj = {};
@@ -167,18 +166,17 @@ import {useDialogStore} from '../../../stores/dialog';
                 created_obj.name = item.name;
                 created_obj.price = item.price;
                 created_obj.type = item.type;
+                created_obj.target = e.target;
 
                 const calendarDragStore = useCalendarDragStore();
                 calendarDragStore.dragObjSet(created_obj);
             },
 
             endDrag(e, list) {
-                //console.log(e)
-                //console.log(list)
+
             },
             dropDrag(e, item) {
-                //console.log(e)
-                //console.log(item)
+
             },
         },
     }
