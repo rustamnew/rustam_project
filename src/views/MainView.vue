@@ -49,8 +49,7 @@ import Dialog from '../components/Dialog/Dialog.vue';
     <Dialog />
     <swiper-container 
         ref="swiper" 
-        init="false" 
-        :modules="modules"
+        init="false"
         allowTouchMove="true" 
         slides-per-view="1"
         pagination="true"  
