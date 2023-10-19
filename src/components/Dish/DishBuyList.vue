@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <section class="buylist">
+    <section class="expanded-buylist">
         <h3>Список покупок</h3>
 
         <div class="container">

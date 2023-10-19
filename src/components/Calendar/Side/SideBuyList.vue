@@ -7,14 +7,14 @@ import {useDialogStore} from '../../../stores/dialog';
 </script>
 
 <template>
-    <div class="needs-wrapper">
-        <div class="needs">
+    <div class="buyList-wrapper">
+        <div class="buyList">
             <h3>Покупки</h3>
 
-            <div class="needs-list">
+            <div class="buyList-list">
                 
                 <template v-for="item in items" :key="item.name">
-                    <div class="needs-item" :style="{
+                    <div class="buyList-item" :style="{
                         backgroundColor: item.color,
                     }" 
                     :black-font="item.color ? 'true' : 'false'"
@@ -34,13 +34,13 @@ import {useDialogStore} from '../../../stores/dialog';
         
             </div>
 
-            <div class="needs-add">
+            <div class="buyList-add">
                 <button class="button"
                 @click="addBuyItem()">Добавить</button>
 
                 <div class="inputs" v-if="showAddButtons">
-                    <input class="input" type="text" name="add-needs-name" placeholder="Название" @keyup="inputsCheck()">
-                    <input class="input" type="number" name="add-needs-price" placeholder="Стоимость" @keyup="inputsCheck()">
+                    <input class="input" type="text" name="add-buyList-name" placeholder="Название" @keyup="inputsCheck()">
+                    <input class="input" type="number" name="add-buyList-price" placeholder="Стоимость" @keyup="inputsCheck()">
 
                     <button class="check-submit" :class="{active: activeCheckSumbit}" @click="buyItemAddSubmit()">
                         <img src="../../../assets/images/icons/check-icon.svg" alt="Готово">
@@ -81,14 +81,14 @@ import {useDialogStore} from '../../../stores/dialog';
                 this.showAddButtons = true
 
                 setTimeout(() => {
-                    document.querySelector('[name=add-needs-name]').focus()
+                    document.querySelector('[name=add-buyList-name]').focus()
                 }, 1);
                 
             },
 
             buyItemAddSubmit() {
-                let name_input = document.querySelector('input[name=add-needs-name]')
-                let price_input = document.querySelector('input[name=add-needs-price]')
+                let name_input = document.querySelector('input[name=add-buyList-name]')
+                let price_input = document.querySelector('input[name=add-buyList-price]')
 
                 let name = name_input.value
                 let price = price_input.value
@@ -111,7 +111,7 @@ import {useDialogStore} from '../../../stores/dialog';
                     id: max_id + 1,
                     name: name,
                     price: price,
-                    type: 'needs',
+                    type: 'buyList',
                     color: '#' + random_color
                 }
 
@@ -128,8 +128,8 @@ import {useDialogStore} from '../../../stores/dialog';
             },
 
             inputsCheck() {
-                let name_input = document.querySelector('input[name=add-needs-name]')
-                let price_input = document.querySelector('input[name=add-needs-price]')
+                let name_input = document.querySelector('input[name=add-buyList-name]')
+                let price_input = document.querySelector('input[name=add-buyList-price]')
 
                 if (name_input.value && price_input.value) {
                     this.activeCheckSumbit = true
@@ -139,7 +139,7 @@ import {useDialogStore} from '../../../stores/dialog';
             },
 
             removeBuyItem(e) {
-                let item = e.target.closest('.needs-item')
+                let item = e.target.closest('.buyList-item')
                 let id = item.getAttribute('buy-item-id')
 
                 

@@ -1,9 +1,9 @@
 <script setup>
-    import SideNeeds from './Side/SideNeeds.vue';
+    import SideBuyList from './Side/SideBuyList.vue';
 </script>
 
 <template>
-    <SideNeeds/>
+    <SideBuyList/>
 
     
 </template>

@@ -215,7 +215,7 @@ const date = ref(new Date());
                             price: wish_obj_item.price,
                             date: wish_obj_item.date,
                             target: e.target,
-                            type: "needs",
+                            type: "buyList",
                         }
                         calendarDragStore.dragObjSet(obj)
                     })
@@ -260,7 +260,7 @@ const date = ref(new Date());
                     id: calendarDragStore.dragObj.id,
                     name: calendarDragStore.dragObj.name,
                     price: calendarDragStore.dragObj.price,
-                    type: 'needs',
+                    type: 'buyList',
                     color: calendarDragStore.dragObj.color,
                     target: item,
                     date: date
