@@ -138,6 +138,14 @@ const date = ref(new Date());
 
 
                 this.loadData();
+                Object.entries(this.wishes).forEach( (date) => {
+                    let day_objects = this.wishes[date[0]]
+                    Object.entries(day_objects).forEach( (obj) => {
+                        this.addObjWish(obj)
+                    })
+                    
+                })
+                this.updateTotalSumms();
             },
 
             removeFromCalendar() {
@@ -289,18 +297,6 @@ const date = ref(new Date());
                 this.dataStore.saveData(obj, 'calendar', date)
             },
 
-            onMounted() {
-                this.initCalendar();
-                Object.entries(this.wishes).forEach( (date) => {
-                    let day_objects = this.wishes[date[0]]
-                    Object.entries(day_objects).forEach( (obj) => {
-                        this.addObjWish(obj)
-                    })
-                    
-                })
-                this.updateTotalSumms();
-                
-            },
 
             showRemoveArea() {
                 document.querySelector('.remove-area').classList.add('active')
@@ -312,7 +308,21 @@ const date = ref(new Date());
         },
 
         mounted() {
-            setTimeout(this.onMounted, 1); //Придумать как прицепиться к событию загрузки календаря v-calendar
+            
+            setTimeout( () => { //Придумать как прицепиться к событию загрузки календаря v-calendar
+                let button_next = document.querySelector('.vc-arrow.vc-next.vc-focus')
+                let button_prev = document.querySelector('.vc-arrow.vc-prev.vc-focus')
+
+                button_next.addEventListener('click', () => {
+                    this.initCalendar()
+                })
+                button_prev.addEventListener('click', () => {
+                    this.initCalendar()
+                })  
+
+                this.initCalendar()
+            }, 1);
+            
         }
     }
 </script>
